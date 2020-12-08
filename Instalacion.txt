@@ -1,0 +1,17 @@
+- Si cuenta con MATLAB instalado en version 2017 o superior
+1. Abrir Carpeta "app"
+2. Ejecutar PIA.exe
+3. Esperar a que cargue
+
+- Si no cuenta con MATLAB instalado o se tiene una version anterior a 2017
+1. Abrir carpeta "installer"
+2. Ejecutar el instalador MyAppInstaller_web.exe
+3. Aceptar permisos de administrador (Si no aparece, repetir paso 2 y ejecutar como administrador)
+4. Esperar a que la instalación finalice
+5. Abrir Carpeta "app"
+6. Ejecutar PIA.exe
+7. Esperar a que cargue
+
+Cualquier problema con la instalación se puede poner en contacto vía email: tomasjasso65@gmail.com
+
+Código en https://github.com/xsrajasso/Parametros-del-transformador

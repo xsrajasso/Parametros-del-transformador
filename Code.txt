@@ -1,0 +1,547 @@
+classdef PIA < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                        matlab.ui.Figure
+        TerminalesdebajaencortocircuitoLabel  matlab.ui.control.Label
+        TerminalesdebajaencortocircuitoLabel_2  matlab.ui.control.Label
+        Image                           matlab.ui.control.Image
+        WattsLabel                      matlab.ui.control.Label
+        VoltsLabel                      matlab.ui.control.Label
+        AmperesLabel                    matlab.ui.control.Label
+        KVALabel                        matlab.ui.control.Label
+        VoltsLabel_2                    matlab.ui.control.Label
+        VoltsLabel_3                    matlab.ui.control.Label
+        CLabel                          matlab.ui.control.Label
+        Image2                          matlab.ui.control.Image
+        PotenciadeltransformadorEditFieldLabel  matlab.ui.control.Label
+        PotenciadeltransformadorEditField  matlab.ui.control.NumericEditField
+        VoltajedealtaEditFieldLabel     matlab.ui.control.Label
+        VoltajedealtaEditField          matlab.ui.control.NumericEditField
+        VoltajedebajaEditFieldLabel     matlab.ui.control.Label
+        VoltajedebajaEditField          matlab.ui.control.NumericEditField
+        TemperaturadepruebaEditFieldLabel  matlab.ui.control.Label
+        TemperaturadepruebaEditField    matlab.ui.control.NumericEditField
+        PccEditFieldLabel               matlab.ui.control.Label
+        PccEditField                    matlab.ui.control.NumericEditField
+        PoEditFieldLabel                matlab.ui.control.Label
+        PoEditField                     matlab.ui.control.NumericEditField
+        VccEditFieldLabel               matlab.ui.control.Label
+        VccEditField                    matlab.ui.control.NumericEditField
+        VxEditFieldLabel                matlab.ui.control.Label
+        VxEditField                     matlab.ui.control.NumericEditField
+        IccEditFieldLabel               matlab.ui.control.Label
+        IccEditField                    matlab.ui.control.NumericEditField
+        IexcEditFieldLabel              matlab.ui.control.Label
+        IexcEditField                   matlab.ui.control.NumericEditField
+        CalcularButton                  matlab.ui.control.Button
+        EditField                       matlab.ui.control.NumericEditField
+        EditField_2                     matlab.ui.control.NumericEditField
+        EditField_3                     matlab.ui.control.NumericEditField
+        EditField_4                     matlab.ui.control.NumericEditField
+        EditField_5                     matlab.ui.control.NumericEditField
+        EditField_6                     matlab.ui.control.NumericEditField
+        EditField_7                     matlab.ui.control.NumericEditField
+        EditField_8                     matlab.ui.control.NumericEditField
+        EditField_9                     matlab.ui.control.NumericEditField
+        EditField_10                    matlab.ui.control.NumericEditField
+        autofillButton                  matlab.ui.control.Button
+        TemperaturafinalEditFieldLabel  matlab.ui.control.Label
+        TemperaturafinalEditField       matlab.ui.control.NumericEditField
+        CLabel_2                        matlab.ui.control.Label
+        RHEditFieldLabel                matlab.ui.control.Label
+        RHEditField                     matlab.ui.control.NumericEditField
+        RXEditFieldLabel                matlab.ui.control.Label
+        RXEditField                     matlab.ui.control.NumericEditField
+        ValordelasresistenciasalatemperaturafinalLabel  matlab.ui.control.Label
+        OhmsLabel                       matlab.ui.control.Label
+        OhmsLabel_2                     matlab.ui.control.Label
+        OhmsLabel_3                     matlab.ui.control.Label
+        OhmsLabel_4                     matlab.ui.control.Label
+        OhmsLabel_5                     matlab.ui.control.Label
+        OhmsLabel_6                     matlab.ui.control.Label
+        VoltsLabel_4                    matlab.ui.control.Label
+        VoltsLabel_5                    matlab.ui.control.Label
+        AmperesLabel_2                  matlab.ui.control.Label
+        AmperesLabel_3                  matlab.ui.control.Label
+        clearButton                     matlab.ui.control.Button
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Callback function
+        function TextAreaValueChanged(app, event)
+            value = app.EditField;
+            
+        end
+
+        % Callback function
+        function TextAreaValueChanged2(app, event)
+            value = app.EditField;
+            
+        end
+
+        % Callback function
+        function TextAreaValueChanged3(app, event)
+            value = app.Spinner;
+            
+        end
+
+        % Callback function
+        function EditField_12ValueChanged(app, event)
+            value = app.EditField;
+            
+        end
+
+        % Callback function
+        function TextAreaValueChanged4(app, event)
+            value = app.TextArea.Value;
+            value = app.EditField
+        end
+
+        % Button pushed function: CalcularButton
+        function CalcularButtonPushed(app, event)
+       %ESTE BOTON CALCULA LAS CANTIDADES INGRESADAS PARA LLENAR LOS
+       %PARAMETROS DEL TRANSFORMADOR
+       
+       %Calculos
+            Pcc    = app.PccEditField.Value
+            Vcc    = app.VccEditField.Value
+            Icc    = app.IccEditField.Value
+            Po     = app.PoEditField.Value
+            Vx     = app.VxEditField.Value
+            Iexc   = app.IexcEditField.Value
+            tempp  = app.TemperaturadepruebaEditField.Value
+            tempf  = app.TemperaturafinalEditField.Value
+            a      = (app.VoltajedealtaEditField.Value)/(app.VoltajedebajaEditField.Value)
+            Rh     = ((Pcc/Icc^2)/2)
+            Rxprim = ((Pcc/Icc^2)/2)
+            xprim  = (sqrt((Vcc/Icc)^2-(Rh+Rxprim)^2))/2
+            Rx     = (Rxprim/a^2)
+            jXx    = (xprim/a^2)
+            Rm     = (Po/Iexc)-Rx
+            jXm    = (sqrt(((Vx/Iexc)^2)-((Rx+Rm)^2)))-0.109
+            Ix     = (app.PotenciadeltransformadorEditField.Value*1000)/app.VoltajedebajaEditField.Value
+            Vx     = app.VoltajedebajaEditField.Value
+            Vh     = app.VoltajedealtaEditField.Value
+            jXh    = (sqrt((Vcc/Icc)^2-(Rh+Rxprim)^2))/2
+            Ih     = (app.PotenciadeltransformadorEditField.Value*1000)/app.VoltajedealtaEditField.Value
+            RH     = ((tempf+234.5)/(tempp+234.5))*(Rh)
+            RX     = ((tempf+234.5)/(tempp+234.5))*(Rx)
+
+
+       %Resultados
+            app.EditField.Value    = Rx
+            app.EditField_2.Value  = jXx
+            app.EditField_3.Value  = Rm
+            app.EditField_4.Value  = jXm
+            app.EditField_5.Value  = Ix
+            app.EditField_6.Value  = Vx
+            app.EditField_7.Value  = Rh
+            app.EditField_8.Value  = jXh
+            app.EditField_9.Value  = Vh
+            app.EditField_10.Value = Ih
+            app.RHEditField.Value  = RH 
+            app.RXEditField.Value  = RX 
+            
+
+            
+            
+            
+        end
+
+        % Button pushed function: autofillButton
+        function autofillButtonPushed(app, event)
+            %LA FUNCION DE ESTE BOTON ES SUGERIR VALORES PARA CALCULAR LOS
+            %PARAMETROS DEL TRANSFORMADOR
+            
+            app.PotenciadeltransformadorEditField.Value = 3
+            app.VoltajedealtaEditField.Value            = 220
+            app.VoltajedebajaEditField.Value            = 110
+            app.TemperaturadepruebaEditField.Value      = 25
+            app.TemperaturafinalEditField.Value         = 60
+            app.PccEditField.Value                      = 125
+            app.VccEditField.Value                      = 15
+            app.IccEditField.Value                      = 13.6
+            app.PoEditField.Value                       = 20
+            app.VxEditField.Value                       = 110
+            app.IexcEditField.Value                     = 0.9
+
+           
+        end
+
+        % Button pushed function: clearButton
+        function clearButtonPushed(app, event)
+            %REGRESA TODOS LOS VALORES A 0
+            
+            app.PotenciadeltransformadorEditField.Value = 0
+            app.VoltajedealtaEditField.Value            = 0
+            app.VoltajedebajaEditField.Value            = 0
+            app.TemperaturadepruebaEditField.Value      = 0
+            app.TemperaturafinalEditField.Value         = 0
+            app.PccEditField.Value                      = 0
+            app.VccEditField.Value                      = 0
+            app.IccEditField.Value                      = 0
+            app.PoEditField.Value                       = 0
+            app.VxEditField.Value                       = 0
+            app.IexcEditField.Value                     = 0
+            app.EditField.Value                         = 0
+            app.EditField_2.Value                       = 0
+            app.EditField_3.Value                       = 0
+            app.EditField_4.Value                       = 0
+            app.EditField_5.Value                       = 0
+            app.EditField_6.Value                       = 0
+            app.EditField_7.Value                       = 0
+            app.EditField_8.Value                       = 0
+            app.EditField_9.Value                       = 0
+            app.EditField_10.Value                      = 0
+            app.RHEditField.Value                       = 0
+            app.RXEditField.Value                       = 0
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 1027 649];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create TerminalesdebajaencortocircuitoLabel
+            app.TerminalesdebajaencortocircuitoLabel = uilabel(app.UIFigure);
+            app.TerminalesdebajaencortocircuitoLabel.Position = [352 540 199 22];
+            app.TerminalesdebajaencortocircuitoLabel.Text = 'Terminales de baja en corto circuito:';
+
+            % Create TerminalesdebajaencortocircuitoLabel_2
+            app.TerminalesdebajaencortocircuitoLabel_2 = uilabel(app.UIFigure);
+            app.TerminalesdebajaencortocircuitoLabel_2.Position = [352 499 199 22];
+            app.TerminalesdebajaencortocircuitoLabel_2.Text = 'Terminales de baja en corto circuito:';
+
+            % Create Image
+            app.Image = uiimage(app.UIFigure);
+            app.Image.Position = [56 14 934 379];
+            app.Image.ImageSource = 'pia.png';
+
+            % Create WattsLabel
+            app.WattsLabel = uilabel(app.UIFigure);
+            app.WattsLabel.Position = [598 567 34 22];
+            app.WattsLabel.Text = 'Watts';
+
+            % Create VoltsLabel
+            app.VoltsLabel = uilabel(app.UIFigure);
+            app.VoltsLabel.Position = [676 567 34 22];
+            app.VoltsLabel.Text = 'Volts';
+
+            % Create AmperesLabel
+            app.AmperesLabel = uilabel(app.UIFigure);
+            app.AmperesLabel.Position = [753 567 54 22];
+            app.AmperesLabel.Text = 'Amperes';
+
+            % Create KVALabel
+            app.KVALabel = uilabel(app.UIFigure);
+            app.KVALabel.Position = [294 540 29 22];
+            app.KVALabel.Text = 'KVA';
+
+            % Create VoltsLabel_2
+            app.VoltsLabel_2 = uilabel(app.UIFigure);
+            app.VoltsLabel_2.Position = [293 510 32 22];
+            app.VoltsLabel_2.Text = 'Volts';
+
+            % Create VoltsLabel_3
+            app.VoltsLabel_3 = uilabel(app.UIFigure);
+            app.VoltsLabel_3.Position = [294 480 32 22];
+            app.VoltsLabel_3.Text = 'Volts';
+
+            % Create CLabel
+            app.CLabel = uilabel(app.UIFigure);
+            app.CLabel.Position = [293 450 25 22];
+            app.CLabel.Text = '°C';
+
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.Position = [181 560 684 105];
+            app.Image2.ImageSource = 'header.png';
+
+            % Create PotenciadeltransformadorEditFieldLabel
+            app.PotenciadeltransformadorEditFieldLabel = uilabel(app.UIFigure);
+            app.PotenciadeltransformadorEditFieldLabel.HorizontalAlignment = 'right';
+            app.PotenciadeltransformadorEditFieldLabel.Position = [20 540 153 22];
+            app.PotenciadeltransformadorEditFieldLabel.Text = 'Potencia del transformador:';
+
+            % Create PotenciadeltransformadorEditField
+            app.PotenciadeltransformadorEditField = uieditfield(app.UIFigure, 'numeric');
+            app.PotenciadeltransformadorEditField.Position = [188 540 100 22];
+
+            % Create VoltajedealtaEditFieldLabel
+            app.VoltajedealtaEditFieldLabel = uilabel(app.UIFigure);
+            app.VoltajedealtaEditFieldLabel.HorizontalAlignment = 'right';
+            app.VoltajedealtaEditFieldLabel.Position = [89 510 84 22];
+            app.VoltajedealtaEditFieldLabel.Text = 'Voltaje de alta:';
+
+            % Create VoltajedealtaEditField
+            app.VoltajedealtaEditField = uieditfield(app.UIFigure, 'numeric');
+            app.VoltajedealtaEditField.Position = [188 510 100 22];
+
+            % Create VoltajedebajaEditFieldLabel
+            app.VoltajedebajaEditFieldLabel = uilabel(app.UIFigure);
+            app.VoltajedebajaEditFieldLabel.HorizontalAlignment = 'right';
+            app.VoltajedebajaEditFieldLabel.Position = [85 480 88 22];
+            app.VoltajedebajaEditFieldLabel.Text = 'Voltaje de baja:';
+
+            % Create VoltajedebajaEditField
+            app.VoltajedebajaEditField = uieditfield(app.UIFigure, 'numeric');
+            app.VoltajedebajaEditField.Position = [188 480 100 22];
+
+            % Create TemperaturadepruebaEditFieldLabel
+            app.TemperaturadepruebaEditFieldLabel = uilabel(app.UIFigure);
+            app.TemperaturadepruebaEditFieldLabel.HorizontalAlignment = 'right';
+            app.TemperaturadepruebaEditFieldLabel.Position = [39 450 134 22];
+            app.TemperaturadepruebaEditFieldLabel.Text = 'Temperatura de prueba:';
+
+            % Create TemperaturadepruebaEditField
+            app.TemperaturadepruebaEditField = uieditfield(app.UIFigure, 'numeric');
+            app.TemperaturadepruebaEditField.Position = [188 450 100 22];
+
+            % Create PccEditFieldLabel
+            app.PccEditFieldLabel = uilabel(app.UIFigure);
+            app.PccEditFieldLabel.HorizontalAlignment = 'right';
+            app.PccEditFieldLabel.Position = [550 540 26 23];
+            app.PccEditFieldLabel.Text = 'Pcc';
+
+            % Create PccEditField
+            app.PccEditField = uieditfield(app.UIFigure, 'numeric');
+            app.PccEditField.Position = [586 541 47 22];
+
+            % Create PoEditFieldLabel
+            app.PoEditFieldLabel = uilabel(app.UIFigure);
+            app.PoEditFieldLabel.HorizontalAlignment = 'right';
+            app.PoEditFieldLabel.Position = [550 498 26 23];
+            app.PoEditFieldLabel.Text = 'Po';
+
+            % Create PoEditField
+            app.PoEditField = uieditfield(app.UIFigure, 'numeric');
+            app.PoEditField.Position = [586 499 47 22];
+
+            % Create VccEditFieldLabel
+            app.VccEditFieldLabel = uilabel(app.UIFigure);
+            app.VccEditFieldLabel.HorizontalAlignment = 'right';
+            app.VccEditFieldLabel.Position = [636 540 26 23];
+            app.VccEditFieldLabel.Text = 'Vcc';
+
+            % Create VccEditField
+            app.VccEditField = uieditfield(app.UIFigure, 'numeric');
+            app.VccEditField.Position = [670 541 47 22];
+
+            % Create VxEditFieldLabel
+            app.VxEditFieldLabel = uilabel(app.UIFigure);
+            app.VxEditFieldLabel.HorizontalAlignment = 'right';
+            app.VxEditFieldLabel.Position = [636 498 26 23];
+            app.VxEditFieldLabel.Text = 'Vx';
+
+            % Create VxEditField
+            app.VxEditField = uieditfield(app.UIFigure, 'numeric');
+            app.VxEditField.Position = [670 499 47 22];
+
+            % Create IccEditFieldLabel
+            app.IccEditFieldLabel = uilabel(app.UIFigure);
+            app.IccEditFieldLabel.HorizontalAlignment = 'right';
+            app.IccEditFieldLabel.Position = [720 540 26 23];
+            app.IccEditFieldLabel.Text = 'Icc';
+
+            % Create IccEditField
+            app.IccEditField = uieditfield(app.UIFigure, 'numeric');
+            app.IccEditField.Position = [756 541 47 22];
+
+            % Create IexcEditFieldLabel
+            app.IexcEditFieldLabel = uilabel(app.UIFigure);
+            app.IexcEditFieldLabel.HorizontalAlignment = 'right';
+            app.IexcEditFieldLabel.Position = [719 498 28 23];
+            app.IexcEditFieldLabel.Text = 'Iexc';
+
+            % Create IexcEditField
+            app.IexcEditField = uieditfield(app.UIFigure, 'numeric');
+            app.IexcEditField.Position = [757 499 47 22];
+
+            % Create CalcularButton
+            app.CalcularButton = uibutton(app.UIFigure, 'push');
+            app.CalcularButton.ButtonPushedFcn = createCallbackFcn(app, @CalcularButtonPushed, true);
+            app.CalcularButton.Position = [851 592 139 42];
+            app.CalcularButton.Text = 'Calcular';
+
+            % Create EditField
+            app.EditField = uieditfield(app.UIFigure, 'numeric');
+            app.EditField.Position = [136 347 56 31];
+
+            % Create EditField_2
+            app.EditField_2 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_2.Position = [317 347 56 31];
+
+            % Create EditField_3
+            app.EditField_3 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_3.Position = [432 216 56 31];
+
+            % Create EditField_4
+            app.EditField_4 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_4.Position = [317 117 56 31];
+
+            % Create EditField_5
+            app.EditField_5 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_5.Position = [191 62 56 31];
+
+            % Create EditField_6
+            app.EditField_6 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_6.Position = [103 168 56 31];
+
+            % Create EditField_7
+            app.EditField_7 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_7.Position = [693 347 56 31];
+
+            % Create EditField_8
+            app.EditField_8 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_8.Position = [860 347 56 31];
+
+            % Create EditField_9
+            app.EditField_9 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_9.Position = [839 166 56 31];
+
+            % Create EditField_10
+            app.EditField_10 = uieditfield(app.UIFigure, 'numeric');
+            app.EditField_10.Position = [772 62 56 31];
+
+            % Create autofillButton
+            app.autofillButton = uibutton(app.UIFigure, 'push');
+            app.autofillButton.ButtonPushedFcn = createCallbackFcn(app, @autofillButtonPushed, true);
+            app.autofillButton.Position = [20 612 100 22];
+            app.autofillButton.Text = 'auto-fill';
+
+            % Create TemperaturafinalEditFieldLabel
+            app.TemperaturafinalEditFieldLabel = uilabel(app.UIFigure);
+            app.TemperaturafinalEditFieldLabel.HorizontalAlignment = 'right';
+            app.TemperaturafinalEditFieldLabel.Position = [71 420 102 22];
+            app.TemperaturafinalEditFieldLabel.Text = 'Temperatura final:';
+
+            % Create TemperaturafinalEditField
+            app.TemperaturafinalEditField = uieditfield(app.UIFigure, 'numeric');
+            app.TemperaturafinalEditField.Position = [188 420 100 22];
+
+            % Create CLabel_2
+            app.CLabel_2 = uilabel(app.UIFigure);
+            app.CLabel_2.Position = [293 420 25 22];
+            app.CLabel_2.Text = '°C';
+
+            % Create RHEditFieldLabel
+            app.RHEditFieldLabel = uilabel(app.UIFigure);
+            app.RHEditFieldLabel.HorizontalAlignment = 'right';
+            app.RHEditFieldLabel.Position = [823 441 25 22];
+            app.RHEditFieldLabel.Text = 'RH';
+
+            % Create RHEditField
+            app.RHEditField = uieditfield(app.UIFigure, 'numeric');
+            app.RHEditField.Position = [863 441 100 22];
+
+            % Create RXEditFieldLabel
+            app.RXEditFieldLabel = uilabel(app.UIFigure);
+            app.RXEditFieldLabel.HorizontalAlignment = 'right';
+            app.RXEditFieldLabel.Position = [823 409 25 22];
+            app.RXEditFieldLabel.Text = 'RX';
+
+            % Create RXEditField
+            app.RXEditField = uieditfield(app.UIFigure, 'numeric');
+            app.RXEditField.Position = [863 409 100 22];
+
+            % Create ValordelasresistenciasalatemperaturafinalLabel
+            app.ValordelasresistenciasalatemperaturafinalLabel = uilabel(app.UIFigure);
+            app.ValordelasresistenciasalatemperaturafinalLabel.Position = [552 425 253 22];
+            app.ValordelasresistenciasalatemperaturafinalLabel.Text = 'Valor de las resistencias a la temperatura final';
+
+            % Create OhmsLabel
+            app.OhmsLabel = uilabel(app.UIFigure);
+            app.OhmsLabel.Position = [973 441 38 22];
+            app.OhmsLabel.Text = 'Ohms';
+
+            % Create OhmsLabel_2
+            app.OhmsLabel_2 = uilabel(app.UIFigure);
+            app.OhmsLabel_2.Position = [973 409 38 22];
+            app.OhmsLabel_2.Text = 'Ohms';
+
+            % Create OhmsLabel_3
+            app.OhmsLabel_3 = uilabel(app.UIFigure);
+            app.OhmsLabel_3.Position = [197 351 38 22];
+            app.OhmsLabel_3.Text = 'Ohms';
+
+            % Create OhmsLabel_4
+            app.OhmsLabel_4 = uilabel(app.UIFigure);
+            app.OhmsLabel_4.Position = [377 351 38 22];
+            app.OhmsLabel_4.Text = 'Ohms';
+
+            % Create OhmsLabel_5
+            app.OhmsLabel_5 = uilabel(app.UIFigure);
+            app.OhmsLabel_5.Position = [441 192 38 22];
+            app.OhmsLabel_5.Text = 'Ohms';
+
+            % Create OhmsLabel_6
+            app.OhmsLabel_6 = uilabel(app.UIFigure);
+            app.OhmsLabel_6.Position = [326 92 38 22];
+            app.OhmsLabel_6.Text = 'Ohms';
+
+            % Create VoltsLabel_4
+            app.VoltsLabel_4 = uilabel(app.UIFigure);
+            app.VoltsLabel_4.Position = [166 172 32 22];
+            app.VoltsLabel_4.Text = 'Volts';
+
+            % Create VoltsLabel_5
+            app.VoltsLabel_5 = uilabel(app.UIFigure);
+            app.VoltsLabel_5.Position = [897 171 32 22];
+            app.VoltsLabel_5.Text = 'Volts';
+
+            % Create AmperesLabel_2
+            app.AmperesLabel_2 = uilabel(app.UIFigure);
+            app.AmperesLabel_2.Position = [252 66 54 22];
+            app.AmperesLabel_2.Text = 'Amperes';
+
+            % Create AmperesLabel_3
+            app.AmperesLabel_3 = uilabel(app.UIFigure);
+            app.AmperesLabel_3.Position = [833 67 54 22];
+            app.AmperesLabel_3.Text = 'Amperes';
+
+            % Create clearButton
+            app.clearButton = uibutton(app.UIFigure, 'push');
+            app.clearButton.ButtonPushedFcn = createCallbackFcn(app, @clearButtonPushed, true);
+            app.clearButton.Position = [139 612 100 22];
+            app.clearButton.Text = 'clear';
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = PIA
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
